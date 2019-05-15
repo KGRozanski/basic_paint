@@ -5,7 +5,7 @@ import { fromEvent } from 'rxjs';
 import { throttleTime } from 'rxjs/operators';
 
 $(document).ready(function () {
-  // makeReq();
+  makeReq();
 });
 
 
@@ -34,8 +34,8 @@ function renderUsers(usersList) {
   });
 }
 
-fromEvent(document, 'mousemove').pipe(throttleTime(50)).subscribe((e) => {
-  $('body').append(`
-    <div class="pointer" style="left: ${e.clientX}px; top: ${e.clientY}px"></div>
-  `);
-});
+// fromEvent(document, 'mousemove').pipe(throttleTime(50)).subscribe((e) => {
+//   $('body').append(`
+//     <div class="pointer" style="left: ${e.clientX}px; top: ${e.clientY}px"></div>
+//   `);
+// });
