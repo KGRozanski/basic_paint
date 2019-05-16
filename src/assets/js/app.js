@@ -1,8 +1,8 @@
-import 'bootstrap';
+// import 'bootstrap';
 import '../scss/style.scss';
-import * as $ from 'jquery';
-import { fromEvent } from 'rxjs';
-import { throttleTime } from 'rxjs/operators';
+// import * as $ from 'jquery';
+// import { fromEvent } from 'rxjs';
+// import { throttleTime } from 'rxjs/operators';
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
@@ -11,59 +11,60 @@ canvas.width = window.innerWidth - 50;
 canvas.height = window.innerHeight - 50;
 
 
-
-$(document).ready(function () {
-  new Map(10, 10).generateMap();
-  let rects = [
-    new Path2D('M0 0 l 173 100 l -173 100 l -173 -100'),
-    new Path2D('M346 0 l 173 100 l -173 100 l -173 -100')
-  ];
-  // rects.forEach(el => {
-  //   ctx.fill(el);
-  // });
-
-});
-
 class Map {
-  constructor(width, height) {
+  constructor(width, height, tileSize) {
     this.width = width;
     this.height = height;
+    this.tileSize = tileSize;
     this.mapArray = [];
   }
 
   generateMap() {
-    let startPoint = {x: 173, y: -100};
+    let id = 0,
+    startPoint = -100,
+    posCalc = {
+      x: 0,
+      y: startPoint
+    };
 
-    let id = 0;
-
-    for(let i = 0; i < this.height; i++){
-      let posCalc = {};
+    for (let i = 0; i < this.height; i++) {
+      this.mapArray.push([]);
       if (i % 2) {
-        posCalc = startPoint;
+        posCalc.x = 173;
       } else {
         posCalc.x = 0;
-        posCalc.y = startPoint.y;
+        posCalc.y = startPoint;
       }
-      this.mapArray.push([]);
-
-      for(let cell = 0; cell < this.width; cell++) {
-        console.log(posCalc);
-        this.mapArray[i].push({id: id, x: posCalc.x, y: posCalc.y, path: new Path2D(`M${posCalc.x} ${posCalc.y} l 173 100 l -173 100 l -173 -100`)});
+      for (var cell = 0; cell < this.width; cell++) {
+        let instance = new Tile(id, posCalc.x, posCalc.y, new Path2D(`M${posCalc.x} ${posCalc.y} l 173 100 l -173 100 l -173 -100`));
+        this.mapArray[i].push(instance);
         //Calculate starting point for next tile
         posCalc.x += 346;
         id++;
       }
-      startPoint.y += 100;
+      posCalc += 100;
     }
-
     this.mapArray.forEach((el) => {
       el.forEach(tile => {
         ctx.fill(tile.path);
       });
     });
+    console.log(this.mapArray);
+  }
+
+}
+
+class Tile {
+  constructor(id, x, y, path) {
+    this.id = id;
+    this.x = x;
+    this.y = y;
+    this.path = path;
   }
 }
 
+let map = new Map(10, 12);
+map.generateMap();
 
 
 
