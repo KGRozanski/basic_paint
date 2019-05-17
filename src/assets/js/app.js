@@ -1,14 +1,14 @@
 // import 'bootstrap';
 import '../scss/style.scss';
-// import * as $ from 'jquery';
-// import { fromEvent } from 'rxjs';
-// import { throttleTime } from 'rxjs/operators';
+//import * as $ from 'jquery';
+//import { fromEvent } from 'rxjs';
+//import { throttleTime } from 'rxjs/operators';
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
 //Set canvas sizes
-canvas.width = window.innerWidth - 50;
-canvas.height = window.innerHeight - 50;
+canvas.width = window.innerWidth - 20;
+canvas.height = window.innerHeight;
 
 
 class Map {
@@ -29,11 +29,13 @@ class Map {
 
     for (let i = 0; i < this.height; i++) {
       this.mapArray.push([]);
+      if(i == 0) {
+        posCalc.y = startPoint;
+      }
       if (i % 2) {
         posCalc.x = 173;
       } else {
         posCalc.x = 0;
-        posCalc.y = startPoint;
       }
       for (var cell = 0; cell < this.width; cell++) {
         let instance = new Tile(id, posCalc.x, posCalc.y, new Path2D(`M${posCalc.x} ${posCalc.y} l 173 100 l -173 100 l -173 -100`));
@@ -42,8 +44,10 @@ class Map {
         posCalc.x += 346;
         id++;
       }
-      posCalc += 100;
+      posCalc.y += 100;
     }
+
+
     this.mapArray.forEach((el) => {
       el.forEach(tile => {
         ctx.fill(tile.path);
@@ -105,8 +109,8 @@ map.generateMap();
 //   });
 // }
 
-// fromEvent(document, 'mousemove').pipe(throttleTime(50)).subscribe((e) => {
-//   $('body').append(`
-//     <div class="pointer" style="left: ${e.clientX}px; top: ${e.clientY}px"></div>
-//   `);
-// });
+//fromEvent(document, 'click').pipe(throttleTime(50)).subscribe((e) => {
+//  $('body').append(`
+//    <div class="pointer" style="left: ${e.clientX}px; top: ${e.clientY}px"></div>
+//  `);
+//});
