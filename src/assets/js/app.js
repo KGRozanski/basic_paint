@@ -10,44 +10,46 @@ const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth - 20;
 canvas.height = window.innerHeight;
 
-
 class Map {
   constructor(width, height, tileSize) {
     this.width = width;
     this.height = height;
-    this.tileSize = tileSize;
+    this.tileSize = tileSize / 2 || 25;
     this.mapArray = [];
   }
 
   generateMap() {
     let id = 0,
-    startPoint = -100,
-    posCalc = {
-      x: 0,
-      y: startPoint
-    };
+      rowOffset = -this.tileSize,
+      tileDimensions = {
+        height: this.tileSize,
+        width: Math.round(Math.tan(1.04719755) * this.tileSize)
+      },
+      posCalc = {
+        x: 0,
+        y: rowOffset,
+      };
 
     for (let i = 0; i < this.height; i++) {
       this.mapArray.push([]);
-      if(i == 0) {
-        posCalc.y = startPoint;
-      }
       if (i % 2) {
-        posCalc.x = 173;
+        posCalc.x = tileDimensions.width;
       } else {
         posCalc.x = 0;
       }
       for (var cell = 0; cell < this.width; cell++) {
-        let instance = new Tile(id, posCalc.x, posCalc.y, new Path2D(`M${posCalc.x} ${posCalc.y} l 173 100 l -173 100 l -173 -100`));
+        let instance = new Tile(id, posCalc.x, posCalc.y, new Path2D(`M${posCalc.x} ${posCalc.y} l ${tileDimensions.width} ${tileDimensions.height} l -${tileDimensions.width} ${tileDimensions.height} l -${tileDimensions.width} -${tileDimensions.height}`));
         this.mapArray[i].push(instance);
         //Calculate starting point for next tile
-        posCalc.x += 346;
+        posCalc.x += tileDimensions.width * 2;
         id++;
       }
-      posCalc.y += 100;
+      posCalc.y += tileDimensions.height;
     }
+    this.renderMap();
+  }
 
-
+  renderMap() {
     this.mapArray.forEach((el) => {
       el.forEach(tile => {
         ctx.fill(tile.path);
@@ -67,16 +69,8 @@ class Tile {
   }
 }
 
-let map = new Map(10, 12);
+let map = new Map(50, 90, 200);
 map.generateMap();
-
-
-
-
-
-
-
-
 
 
 
