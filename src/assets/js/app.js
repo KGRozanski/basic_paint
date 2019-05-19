@@ -67,77 +67,53 @@ class Map {
   }
 
   addListener() {
-    fromEvent(canvas, 'click').pipe(throttleTime(50)).subscribe((e) => {
+    fromEvent(canvas, 'mousemove').pipe(throttleTime(50)).subscribe((e) => {
       this.selectTile(e.clientX, e.clientY);
     });
   }
 
   selectTile(clientX, clientY) {
-    let fullRows = Math.ceil((clientY / this.tileHeight)),
-      fullCols,
-      pointInTileOffsetX,
-      pointInTileOffsetY,
-      checkingHeight,
-      direction = 0;
+    let row = Math.ceil((clientY / this.tileHeight)),
+      col,
+      vectorX,
+      vectorY = (row * this.tileHeight) - clientY,
+      direction = 0,
+      slope;
 
-    if (fullRows % 2) {
-      fullCols = Math.abs(Math.floor(clientX / (this.tileWidth * 2)));
-      pointInTileOffsetX = clientX - (fullCols * (this.tileWidth * 2));
+    //Find approximate tile column index to find calculating point for slope
+    //then find vector sides values to calculate if point is in upper or lower row
+    if (row % 2) {
+      col = Math.abs(Math.floor(clientX / (this.tileWidth * 2)));
+      vectorX = clientX - (col * (this.tileWidth * 2));    
     } else {
-      fullCols = Math.abs(Math.ceil((clientX - this.tileWidth) / (this.tileWidth * 2)));
-      pointInTileOffsetX = (fullCols * (this.tileWidth  * 2)) - clientX;
-    };
-
-    // if (clientY >= ((this.tileHeight * fullRows) + this.tileHeight)) {
-    //   fullRows += 2;
-    // }
-
-    let selectedRhombus = this.mapArray[fullRows][fullCols];
-
-
-    //Calculate coordinates inside tile area to find 
-    //if mouse covers currently selected tile
-    //depending
-    
-    if (pointInTileOffsetX > this.tileWidth ) {
+      col = Math.abs(Math.ceil((clientX - this.tileWidth) / (this.tileWidth * 2)));
+      vectorX = clientX - (col * (this.tileWidth * 2) - this.tileWidth);
+    }
+    //If cursor is on right side of rhombus find vectorX from right hand side
+    //and change direction of cursor terms of rhombus
+    if (vectorX > this.tileWidth) {
+      vectorX = (this.tileWidth) * 2 - vectorX;
       direction = 1;
-      pointInTileOffsetX = clientX - ((fullCols + 1) * (this.tileWidth * 2));
     }
-
-    pointInTileOffsetY = Math.ceil((Math.tan(0.523598776) * Math.abs(pointInTileOffsetX)));
-    checkingHeight = (this.tileHeight * fullRows) - clientY;
-    console.log(clientX - (fullCols * (this.tileWidth)))
-
-    if (checkingHeight > pointInTileOffsetY) {
-      let grabRow = fullRows - 1;
-    
-      if (pointInTileOffsetX < this.tileWidth && direction == 0) {
-        selectedRhombus = this.mapArray[grabRow][fullCols];
+    //Set tile of currently most matching coordinates
+    let selectedRhombus = this.mapArray[row][col];
+    //Check if cursor is over currently selected tile
+    //If it's not, then figure out which to select
+    slope = (this.tileHeight / this.tileWidth);
+    if(vectorY > (vectorX * Math.ceil(slope))) {
+      if(row % 2){
+        selectedRhombus = this.mapArray[row - 1][col + direction];
       } else {
-        let grabCol = fullCols + 1;
-        selectedRhombus = this.mapArray[grabRow][grabCol];
+        //If row is even neutralize first tile shift
+        if(direction == 1) {
+          selectedRhombus = this.mapArray[row - 1][col];
+        } else {
+          selectedRhombus = this.mapArray[row - 1][col - 1];
+        }
       }
-
     }
-
-
-
-    let logging = {
-      'fullRows': fullRows,
-      'clientY': clientY,
-      'fullCols': fullCols,
-      'clientX': clientX,
-      'pointInTileOffsetX': pointInTileOffsetX
-    }
-    console.log(logging);
-    console.log(this.mapArray[fullRows][fullCols]);
-
-
-
-
-
     //Rerender selected tile
-    ctx.fillStyle = "#00FF00";
+    ctx.fillStyle = "#ff0000";
     ctx.fill(new Path2D(`M${selectedRhombus.x} ${selectedRhombus.y} l ${this.tileWidth} ${this.tileHeight} l -${this.tileWidth} ${this.tileHeight} l -${this.tileWidth} -${this.tileHeight}`));
   }
 
@@ -152,7 +128,7 @@ class Tile {
   }
 }
 
-let map = new Map(50, 90, 200);
+let map = new Map(50, 90, 50);
 map.generateMap();
 
 
