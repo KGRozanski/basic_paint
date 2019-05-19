@@ -84,7 +84,7 @@ class Map {
     //then find vector sides values to calculate if point is in upper or lower row
     if (row % 2) {
       col = Math.abs(Math.floor(clientX / (this.tileWidth * 2)));
-      vectorX = clientX - (col * (this.tileWidth * 2));    
+      vectorX = clientX - (col * (this.tileWidth * 2));
     } else {
       col = Math.abs(Math.ceil((clientX - this.tileWidth) / (this.tileWidth * 2)));
       vectorX = clientX - (col * (this.tileWidth * 2) - this.tileWidth);
@@ -100,12 +100,12 @@ class Map {
     //Check if cursor is over currently selected tile
     //If it's not, then figure out which to select
     slope = (this.tileHeight / this.tileWidth);
-    if(vectorY > (vectorX * Math.ceil(slope))) {
-      if(row % 2){
+    if (vectorY > (vectorX * slope)) {
+      if (row % 2) {
         selectedRhombus = this.mapArray[row - 1][col + direction];
       } else {
         //If row is even neutralize first tile shift
-        if(direction == 1) {
+        if (direction == 1) {
           selectedRhombus = this.mapArray[row - 1][col];
         } else {
           selectedRhombus = this.mapArray[row - 1][col - 1];
@@ -113,7 +113,7 @@ class Map {
       }
     }
     //Rerender selected tile
-    ctx.fillStyle = "#ff0000";
+    ctx.fillStyle = "#006f00";
     ctx.fill(new Path2D(`M${selectedRhombus.x} ${selectedRhombus.y} l ${this.tileWidth} ${this.tileHeight} l -${this.tileWidth} ${this.tileHeight} l -${this.tileWidth} -${this.tileHeight}`));
   }
 
