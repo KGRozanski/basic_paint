@@ -11,8 +11,13 @@ const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
 //Set canvas sizes
-canvas.width = window.innerWidth - 20;
+canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
+
+$( window ).resize(function() {
+  $("#canvas").width($( window ).width())
+  $("#canvas").height($( window ).height())
+});
 
 class Map {
   constructor(width, height, tileSize) {
@@ -60,7 +65,6 @@ class Map {
         ctx.fill(tile.path);
       });
     });
-    console.log(this.mapArray);
 
     //Execute observable for mouse inputs
     this.addListener();
@@ -78,7 +82,8 @@ class Map {
       vectorX,
       vectorY = (row * this.tileHeight) - clientY,
       direction = 0,
-      slope;
+      slope,
+      selectedRhombus;
 
     //Find approximate tile column index to find calculating point for slope
     //then find vector sides values to calculate if point is in upper or lower row
@@ -96,7 +101,8 @@ class Map {
       direction = 1;
     }
     //Set tile of currently most matching coordinates
-    let selectedRhombus = this.mapArray[row][col];
+    selectedRhombus = this.mapArray[row][col];
+
     //Check if cursor is over currently selected tile
     //If it's not, then figure out which to select
     slope = (this.tileHeight / this.tileWidth);
@@ -128,7 +134,7 @@ class Tile {
   }
 }
 
-let map = new Map(50, 90, 50);
+let map = new Map(50, 70, 50);
 map.generateMap();
 
 
