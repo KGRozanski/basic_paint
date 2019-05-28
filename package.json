@@ -1,7 +1,7 @@
 {
   "name": "ajax-plain",
-  "version": "1.0.9",
-  "description": "",
+  "version": "1.0.10",
+  "description": "Simple isometric map",
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --open",
