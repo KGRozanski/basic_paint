@@ -1,18 +1,37 @@
 // import 'bootstrap';
 import '../scss/style.scss';
 import * as $ from 'jquery';
+import Konva from 'konva';
 import {
     fromEvent
 } from 'rxjs';
 import {
     throttleTime
 } from 'rxjs/operators';
-const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext('2d');
 
-//Set canvas sizes
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+
+
+var stage = new Konva.Stage({
+    container: 'container', // id of container <div>
+    width: 1800,
+    height: 850
+});
+
+// then create layer
+var mapLayer = new Konva.Layer();
+
+
+stage.add(mapLayer);
+ 
+
+const canvas = document.getElementsByTagName('canvas');
+
+const ctx = canvas[0].getContext('2d');
+
+
+// Set canvas sizes
+// canvas.width = window.innerWidth;
+// canvas.height = window.innerHeight;
 
 
 
@@ -45,7 +64,11 @@ class Map {
                 posCalc.x = 0;
             }
             for (var cell = 0; cell < this.width; cell++) {
-                let instance = new Tile(id, posCalc.x, posCalc.y, new Path2D(`M${posCalc.x} ${posCalc.y} l ${tileDimensions.width} ${tileDimensions.height} l -${tileDimensions.width} ${tileDimensions.height} l -${tileDimensions.width} -${tileDimensions.height}`));
+                let instance = new Tile(id, posCalc.x, posCalc.y,
+                    new Konva.Path({
+                        data: `M${posCalc.x} ${posCalc.y} l ${tileDimensions.width} ${tileDimensions.height} l -${tileDimensions.width} ${tileDimensions.height} l -${tileDimensions.width} -${tileDimensions.height}`,
+                        fill: 'green'
+                    }));
                 this.mapArray[i].push(instance);
                 //Calculate starting point for next tile
                 posCalc.x += tileDimensions.width * 2;
@@ -57,14 +80,23 @@ class Map {
     }
 
     renderMap() {
+
+
         this.mapArray.forEach((el) => {
             el.forEach(tile => {
-                ctx.fill(tile.path);
+                // add the shape to the layer
+                mapLayer.add(tile.path);
+
             });
         });
+        // add the layer to the stage
+        stage.add(mapLayer);
 
+        // draw the image
+        mapLayer.draw();
         //Execute observable for mouse inputs
         this.addListener();
+        
     }
 
     addListener() {
@@ -116,8 +148,18 @@ class Map {
             }
         }
         //Rerender selected tile
-        ctx.fillStyle = "#006f00";
-        ctx.fill(new Path2D(`M${selectedRhombus.x} ${selectedRhombus.y} l ${this.tileWidth} ${this.tileHeight} l -${this.tileWidth} ${this.tileHeight} l -${this.tileWidth} -${this.tileHeight}`));
+        // ctx.fillStyle = "#006f00";
+        selectedRhombus =  new Konva.Path({
+            data: `M${selectedRhombus.x} ${selectedRhombus.y} l ${this.tileWidth} ${this.tileHeight} l -${this.tileWidth} ${this.tileHeight} l -${this.tileWidth} -${this.tileHeight}`,
+            fill: 'blue',
+        });
+
+        // add the shape to the layer
+        mapLayer.add(selectedRhombus);
+
+        // add the layer to the stage
+        stage.add(mapLayer);
+        
     }
 
 }
@@ -131,7 +173,7 @@ class Tile {
     }
 }
 
-let map = new Map(50, 70, 50);
+let map = new Map(50, 70, 30);
 map.generateMap();
 
 
