@@ -1,6 +1,6 @@
 {
   "name": "ajax-plain",
-  "version": "1.0.14",
+  "version": "1.0.15",
   "description": "Simple isometric map",
   "main": "index.js",
   "scripts": {

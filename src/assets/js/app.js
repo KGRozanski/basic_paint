@@ -14,10 +14,7 @@ const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-$(window).resize(function() {
-    $("#canvas").width($(window).width())
-    $("#canvas").height($(window).height())
-});
+
 
 class Map {
     constructor(width, height, tileSize) {
