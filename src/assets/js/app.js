@@ -11,28 +11,64 @@ import {
 
 
 
-var stage = new Konva.Stage({
-    container: 'container', // id of container <div>
-    width: 1800,
-    height: 850
-});
-
-// then create layer
-var mapLayer = new Konva.Layer();
 
 
-stage.add(mapLayer);
+class Controller {
+
+    constructor() {
+        this.map = new Map(50, 70, 30);
+        this.view = new View();
+    }
+
+    startGame() {
+        this.view.renderMap(this.map.mapArray);
+
+        this.initEventHandlers();
+    }
+    initEventHandlers() {
+       
+        fromEvent(this.view.canvas, 'mousemove').pipe(throttleTime(50)).subscribe((e) => {
+            this.view.render( this.map.selectTile(e.clientX, e.clientY));
+        });
+    }
+
+
+   
+}
+
+
+class View {
+    constructor() {
+        this.canvas = null;
+        this.stage = new Konva.Stage({
+            container: 'container', // id of container <div>
+            width: 1800,
+            height: 850
+        });
  
+        this.mapLayer = new Konva.Layer();
+        this.stage.add(this.mapLayer);        
+        this.canvas = document.getElementsByTagName('canvas');
+     
+    }
 
-const canvas = document.getElementsByTagName('canvas');
+    renderMap(shapes) {
+        shapes.forEach((el) => {
+            el.forEach(tile => {
+                // add the shape to the layer
+                this.mapLayer.add(tile.path);
+            });
+        });
+        // add the layer to the stage
+        this.stage.add(this.mapLayer);
+        this.mapLayer.draw();
+    }
 
-const ctx = canvas[0].getContext('2d');
-
-
-// Set canvas sizes
-// canvas.width = window.innerWidth;
-// canvas.height = window.innerHeight;
-
+    render(shape) {
+        this.mapLayer.add(shape.path);
+        shape.path.draw();
+    }
+}
 
 
 class Map {
@@ -42,7 +78,9 @@ class Map {
         this.tileHeight = tileSize / 2 || 25;
         this.tileWidth = Math.round(Math.tan(1.04719755) * this.tileHeight);
         this.mapArray = [];
+        this.generateMap();
     }
+
 
     generateMap() {
         let id = 0,
@@ -76,34 +114,9 @@ class Map {
             }
             posCalc.y += tileDimensions.height;
         }
-        this.renderMap();
+        return this.mapArray;
     }
 
-    renderMap() {
-
-
-        this.mapArray.forEach((el) => {
-            el.forEach(tile => {
-                // add the shape to the layer
-                mapLayer.add(tile.path);
-
-            });
-        });
-        // add the layer to the stage
-        stage.add(mapLayer);
-
-        // draw the image
-        mapLayer.draw();
-        //Execute observable for mouse inputs
-        this.addListener();
-        
-    }
-
-    addListener() {
-        fromEvent(canvas, 'mousemove').pipe(throttleTime(50)).subscribe((e) => {
-            this.selectTile(e.clientX, e.clientY);
-        });
-    }
 
     selectTile(clientX, clientY) {
         let row = Math.ceil((clientY / this.tileHeight)),
@@ -148,17 +161,17 @@ class Map {
             }
         }
         //Rerender selected tile
-        // ctx.fillStyle = "#006f00";
-        selectedRhombus =  new Konva.Path({
-            data: `M${selectedRhombus.x} ${selectedRhombus.y} l ${this.tileWidth} ${this.tileHeight} l -${this.tileWidth} ${this.tileHeight} l -${this.tileWidth} -${this.tileHeight}`,
-            fill: 'blue',
-        });
+        
+        let selectedTile = 
+        new Tile(selectedRhombus.id, selectedRhombus.x, selectedRhombus.y,
+            new Konva.Path({
+                data: `M${selectedRhombus.x} ${selectedRhombus.y} l ${this.tileWidth} ${this.tileHeight} l -${this.tileWidth} ${this.tileHeight} l -${this.tileWidth} -${this.tileHeight}`,
+                fill: 'blue',
+            }));
 
-        // add the shape to the layer
-        mapLayer.add(selectedRhombus);
+        return selectedTile;
 
-        // add the layer to the stage
-        stage.add(mapLayer);
+
         
     }
 
@@ -173,8 +186,29 @@ class Tile {
     }
 }
 
-let map = new Map(50, 70, 30);
-map.generateMap();
+
+
+const game = new Controller().startGame();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
