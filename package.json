@@ -1,6 +1,6 @@
 {
-  "name": "ajax-plain",
-  "version": "1.1.0",
+  "name": "isometric-game",
+  "version": "1.1.1",
   "description": "Simple isometric map",
   "main": "index.js",
   "scripts": {
