@@ -1,4 +1,3 @@
-// import 'bootstrap';
 import '../scss/style.scss';
 import * as $ from 'jquery';
 import { fromEvent } from 'rxjs';
