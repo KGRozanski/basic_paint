@@ -5,6 +5,4 @@ export default class gameModel {
         this.map = new Map(50, 70, 30);
 
     }
-
-
 }

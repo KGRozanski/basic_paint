@@ -26,7 +26,7 @@ class Controller {
         fromEvent(this.view.canvas, 'mousemove')
         .pipe(throttleTime(50))
         .subscribe((e) => {
-            this.view.render(game.map.selectTile(e.clientX, e.clientY));
+            this.view.render(game.map.selectTile(e.offsetX, e.offsetY));
         });
     }
 
