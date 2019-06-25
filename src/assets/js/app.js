@@ -1,5 +1,4 @@
 import '../scss/style.scss';
-import * as $ from 'jquery';
 import { fromEvent } from 'rxjs';
 import { throttleTime } from 'rxjs/operators';
 
