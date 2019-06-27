@@ -32,7 +32,6 @@
     "ftp-deploy": "2.3.3"
   },
   "dependencies": {
-    "bootstrap": "^4.2.1",
     "copy-webpack-plugin": "^4.6.0",
     "jquery": "^3.3.1",
     "konva": "^3.3.3",
