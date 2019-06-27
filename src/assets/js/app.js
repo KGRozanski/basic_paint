@@ -2,7 +2,8 @@ import '../scss/style.scss';
 import { fromEvent } from 'rxjs';
 import { throttleTime } from 'rxjs/operators';
 
-import gameModel from './models/gameModel';
+import Game from './models/gameModel.js';
+import Menu from './models/menuModel.js';
 import View from './views/view.js';
 
 
@@ -11,27 +12,27 @@ import View from './views/view.js';
 class Controller {
     constructor() {
         this.view = new View();
-        this.game = new gameModel();
+        this.game = new Game();
+        this.menu = new Menu();
         this.startGame(this.game.map.mapArray);
     }
 
     startGame(map) {
-        this.render(map);
-    }
-
-    //Main game initializeing function
-    render(objectToRender) {
-        this.view.render(objectToRender);
+        this.view.renderMap(map);
+        console.log(this.menu.itemBg)
+        this.view.render(this.menu.itemBg);
         this.initEventHandlers();
     }
 
+
+    
     //Main purpose of this function is to
     //instantiate
     initEventHandlers() {
         fromEvent(this.view.canvas, 'mousemove')
         .pipe(throttleTime(50))
         .subscribe((e) => {
-            this.view.render(this.game.map.selectTile(e.offsetX, e.offsetY));
+            this.view.renderShape(this.game.map.selectTile(e.offsetX, e.offsetY));
         });
     }
 
@@ -40,7 +41,6 @@ class Controller {
 
 
 const ctrl = new Controller();
-
 
 
 
