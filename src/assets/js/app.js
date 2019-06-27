@@ -6,16 +6,22 @@ import gameModel from './models/gameModel';
 import View from './views/view.js';
 
 
-const game = new gameModel();
+
 
 class Controller {
     constructor() {
         this.view = new View();
+        this.game = new gameModel();
+        this.startGame(this.game.map.mapArray);
+    }
+
+    startGame(map) {
+        this.render(map);
     }
 
     //Main game initializeing function
-    startGame() {
-        this.view.renderMap(game.map.mapArray);
+    render(objectToRender) {
+        this.view.render(objectToRender);
         this.initEventHandlers();
     }
 
@@ -25,7 +31,7 @@ class Controller {
         fromEvent(this.view.canvas, 'mousemove')
         .pipe(throttleTime(50))
         .subscribe((e) => {
-            this.view.render(game.map.selectTile(e.offsetX, e.offsetY));
+            this.view.render(this.game.map.selectTile(e.offsetX, e.offsetY));
         });
     }
 
@@ -34,7 +40,7 @@ class Controller {
 
 
 const ctrl = new Controller();
-ctrl.startGame();
+
 
 
 

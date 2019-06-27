@@ -8,7 +8,8 @@ export default class Map {
         this.tileHeight = tileSize / 2 || 25;
         this.tileWidth = Math.round(Math.tan(1.04719755) * this.tileHeight);
         this.mapArray = [];
-        this.generateMap();
+        this.generateMap()
+
     }
 
     generateMap() {

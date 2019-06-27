@@ -1,4 +1,5 @@
 import Konva from 'konva';
+import { isArray } from 'util';
 
 export default class View {
     constructor() {
@@ -14,21 +15,24 @@ export default class View {
         this.stage.add(this.mapLayer);
     }
 
-    //Rendering map function
-    renderMap(shapes) {
-        shapes.forEach((el) => {
-            el.forEach(tile => {
-                // add the shape to the layer
-                this.mapLayer.add(tile.path);
-            });
-        });
-        // add the layer to the stage
-        this.stage.add(this.mapLayer);
-        this.mapLayer.draw();
-    }
 
-    render(shape) {
-        this.mapLayer.add(shape.path);
-        shape.path.draw();
+    render(area) {
+        switch (Array.isArray(area)) {
+            case true:
+                area.forEach((el) => {
+                    el.forEach(tile => {
+                        // add the shape to the layer
+                        this.mapLayer.add(tile.path);
+                    });
+                });
+                this.stage.add(this.mapLayer);
+                break;
+        
+            default:
+                this.mapLayer.add(area.path);
+                area.path.draw();
+                break;
+        }
+        
     }
 }
