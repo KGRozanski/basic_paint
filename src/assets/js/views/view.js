@@ -5,8 +5,8 @@ export default class View {
         this.canvas = document.getElementsByTagName('canvas');
         this.stage = new Konva.Stage({
             container: 'container', // id of container <div>
-            width: 1800,
-            height: 850
+            width: window.innerWidth,
+            height: window.innerHeight
         });
         //Initialize new layer to handle the map
         this.mapLayer = new Konva.Layer();

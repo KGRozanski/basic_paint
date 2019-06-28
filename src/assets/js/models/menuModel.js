@@ -11,8 +11,8 @@ export default class Menu {
             })
             .then(() => {
                 return new Konva.Image({
-                    x: 50,
-                    y: 50,
+                    x: 0,
+                    y: 0,
                     image: imageObj,
                     width: 100,
                     height: 100

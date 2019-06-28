@@ -1,20 +1,25 @@
-
-.pointer{
-    position: fixed;
-
-    &::before{
-        position: absolute;
-        content: ' ';
-        width: 2px;
-        height: 20px;
-        background-color: #000;
-    }
-    &::after{
-        position: absolute;
-        transform: rotate(90deg);
-        content: ' ';
-        width: 2px;
-        height: 20px;
-        background-color: #000;
-    }
+body{
+    margin: 0;
+    padding: 0;
 }
+
+
+// .pointer{
+//     position: fixed;
+
+//     &::before{
+//         position: absolute;
+//         content: ' ';
+//         width: 2px;
+//         height: 20px;
+//         background-color: #000;
+//     }
+//     &::after{
+//         position: absolute;
+//         transform: rotate(90deg);
+//         content: ' ';
+//         width: 2px;
+//         height: 20px;
+//         background-color: #000;
+//     }
+// }
