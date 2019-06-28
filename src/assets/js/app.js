@@ -14,16 +14,16 @@ class Controller {
         this.view = new View();
         this.game = new Game();
         this.menu = new Menu();
-        this.startGame(this.game.map.mapArray);
+        this.startGame(this.game.map.mapArray, this.menu.itemBg);
+ 
     }
 
-    startGame(map) {
+    startGame(map, img) {
         this.view.renderMap(map);
-        console.log(this.menu.itemBg)
-        this.view.render(this.menu.itemBg);
+        this.view.render(img);
         this.initEventHandlers();
+        this.view.getFrame();
     }
-
 
     
     //Main purpose of this function is to

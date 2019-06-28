@@ -10,8 +10,12 @@ export default class View {
         });
         //Initialize new layer to handle the map
         this.mapLayer = new Konva.Layer();
-        this.menuLayer = new Konva.Layer();
-        this.mapGroup =  new Konva.Group({
+
+        this.mapGroup = new Konva.Group({
+            x: 0,
+            y: 0
+        });
+        this.menuGroup = new Konva.Group({
             x: 0,
             y: 0
         });
@@ -20,8 +24,11 @@ export default class View {
         this.stage.add(this.mapLayer);
     }
 
-    renderMap(mapArray) {
+    getFrame() {
+        this.mapLayer.batchDraw();
+    }
 
+    renderMap(mapArray) {
         mapArray.forEach((el) => {
             el.forEach(tile => {
                 // add every shape to the layer
@@ -32,12 +39,13 @@ export default class View {
     }
 
     render(area) {
-        this.mapGroup.add(area);
-        this.mapLayer.add(this.mapGroup).batchDraw();
-
+        area.then((v) => {
+            this.menuGroup.add(v);
+            this.mapLayer.add(this.menuGroup).batchDraw();
+        })
     }
 
     renderShape(area) {
-         this.mapLayer.add(area.path).batchDraw();
+        this.mapLayer.add(area.path).batchDraw();
     }
 }
