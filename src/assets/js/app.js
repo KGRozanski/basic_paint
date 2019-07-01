@@ -30,7 +30,7 @@ class Controller {
     //instantiate
     initEventHandlers() {
         fromEvent(this.view.canvas, 'mousemove')
-        .pipe(throttleTime(50))
+        .pipe(throttleTime(5))
         .subscribe((e) => {
             this.view.renderShape(this.game.map.selectTile(e.offsetX, e.offsetY));
         });
