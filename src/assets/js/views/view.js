@@ -46,6 +46,7 @@ export default class View {
     }
 
     renderShape(area) {
-        this.mapLayer.add(area.path).batchDraw();
+        this.mapLayer.add(area.path);
+        this.mapLayer.batchDraw();
     }
 }

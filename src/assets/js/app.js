@@ -15,13 +15,20 @@ class Controller {
         this.game = new Game();
         this.menu = new Menu();
         this.startGame(this.game.map.mapArray, this.menu.itemBg);
+
+
+        this.view.mapLayer.on('click', function(e) {
+            let selectedTile = e.target;
+            selectedTile.fill('blue');
+            selectedTile.draw();
+        });
  
     }
 
     startGame(map, img) {
         this.view.renderMap(map);
         this.view.render(img);
-        this.initEventHandlers();
+        // this.initEventHandlers();
         this.view.getFrame();
     }
 
