@@ -47,57 +47,5 @@ export default class Map {
         return this.mapArray;
     }
 
-    selectTile(clientX, clientY) {
-        let row = Math.ceil((clientY / this.tileHeight)),
-            col,
-            vectorX,
-            vectorY = (row * this.tileHeight) - clientY,
-            direction = 0,
-            slope,
-            selectedRhombus;
 
-        //Find approximate tile column index to find calculating point for slope
-        //then find vector sides values to calculate if point is in upper or lower row
-        if (row % 2) {
-            col = Math.abs(Math.floor(clientX / (this.tileWidth * 2)));
-            vectorX = clientX - (col * (this.tileWidth * 2));
-        } else {
-            col = Math.abs(Math.ceil((clientX - this.tileWidth) / (this.tileWidth * 2)));
-            vectorX = clientX - (col * (this.tileWidth * 2) - this.tileWidth);
-        }
-        //If cursor is on right side of rhombus find vectorX from right hand side
-        //and change direction of cursor terms of rhombus
-        if (vectorX > this.tileWidth) {
-            vectorX = (this.tileWidth) * 2 - vectorX;
-            direction = 1;
-        }
-        //Set tile of currently most matching coordinates
-        selectedRhombus = this.mapArray[row][col];
-
-        //Check if cursor is over currently selected tile
-        //If it's not, then figure out which to select
-        slope = (this.tileHeight / this.tileWidth);
-        if (vectorY > (vectorX * slope)) {
-            if (row % 2) {
-                selectedRhombus = this.mapArray[row - 1][col + direction];
-            } else {
-                //If row is even neutralize first tile shift
-                if (direction == 1) {
-                    selectedRhombus = this.mapArray[row - 1][col];
-                } else {
-                    selectedRhombus = this.mapArray[row - 1][col - 1];
-                }
-            }
-        }
-        //Rerender selected tile
-
-        let selectedTile =
-            new Tile(selectedRhombus.id, selectedRhombus.x, selectedRhombus.y,
-                new Konva.Path({
-                    data: `M${selectedRhombus.x} ${selectedRhombus.y} l ${this.tileWidth} ${this.tileHeight} l -${this.tileWidth} ${this.tileHeight} l -${this.tileWidth} -${this.tileHeight}`,
-                    fill: 'blue'
-                }));
-
-        return selectedTile;
-    }
 }

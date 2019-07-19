@@ -1,4 +1,4 @@
-export default class Menu {
+export default class Hud {
     constructor() {
 
     }
@@ -7,7 +7,7 @@ export default class Menu {
         var imageObj = new Image();
         imageObj.src = 'assets/img/menu.jpg';
         return new Promise((resolve) => {
-                imageObj.onload = resolve
+                imageObj.onload = resolve;
             })
             .then(() => {
                 return new Konva.Image({
@@ -17,6 +17,7 @@ export default class Menu {
                     width: 100,
                     height: 100
                 });
+
             });
     }
 }

@@ -1,9 +1,7 @@
 import '../scss/style.scss';
-import { fromEvent } from 'rxjs';
-import { throttleTime } from 'rxjs/operators';
 
 import Game from './models/gameModel.js';
-import Menu from './models/menuModel.js';
+import Hud from './models/hudModel.js';
 import View from './views/view.js';
 
 
@@ -13,33 +11,25 @@ class Controller {
     constructor() {
         this.view = new View();
         this.game = new Game();
-        this.menu = new Menu();
-        this.startGame(this.game.map.mapArray, this.menu.itemBg);
+        this.menu = new Hud();
+        this.setup(this.game.map.mapArray, this.menu.itemBg);
 
 
-        this.view.mapLayer.on('click', function(e) {
-            let selectedTile = e.target;
-            selectedTile.fill('blue');
-            selectedTile.draw();
-        });
+
  
     }
 
-    startGame(map, img) {
+    setup(map, img) {
         this.view.renderMap(map);
         this.view.render(img);
-        // this.initEventHandlers();
-        this.view.getFrame();
+        this.setupEventHandlers();
     }
 
-    
-    //Main purpose of this function is to
-    //instantiate
-    initEventHandlers() {
-        fromEvent(this.view.canvas, 'mousemove')
-        .pipe(throttleTime(5))
-        .subscribe((e) => {
-            this.view.renderShape(this.game.map.selectTile(e.offsetX, e.offsetY));
+    setupEventHandlers() {
+        this.view.mapLayer.on('click', function(e) {
+            const selectedTile = e.target;
+            selectedTile.fill('blue');
+            selectedTile.draw();
         });
     }
 

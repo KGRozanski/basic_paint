@@ -1,32 +1,35 @@
+let config = require('../config.json');
 import Konva from 'konva';
+
 
 export default class View {
     constructor() {
+        this.width = window.innerWidth,
+        this.height = window.innerHeight,
         this.canvas = document.getElementsByTagName('canvas');
         this.stage = new Konva.Stage({
             container: 'container', // id of container <div>
-            width: window.innerWidth,
-            height: window.innerHeight
+            width: this.width,
+            height: this.height
         });
         //Initialize new layer to handle the map
         this.mapLayer = new Konva.Layer();
+        this.hudLayer = new Konva.Layer();
 
         this.mapGroup = new Konva.Group({
             x: 0,
             y: 0
         });
-        this.menuGroup = new Konva.Group({
+        this.hudGroup = new Konva.Group({
             x: 0,
-            y: 0
+            y: this.height - 100
         });
 
         //Add layer to the Konva stage
         this.stage.add(this.mapLayer);
+        this.stage.add(this.hudLayer);
     }
 
-    getFrame() {
-        this.mapLayer.batchDraw();
-    }
 
     renderMap(mapArray) {
         mapArray.forEach((el) => {
@@ -40,13 +43,10 @@ export default class View {
 
     render(area) {
         area.then((v) => {
-            this.menuGroup.add(v);
-            this.mapLayer.add(this.menuGroup).batchDraw();
+            this.hudGroup.add(v);
+            this.hudLayer.add(this.hudGroup).batchDraw();
         })
     }
 
-    renderShape(area) {
-        this.mapLayer.add(area.path);
-        this.mapLayer.batchDraw();
-    }
+
 }
