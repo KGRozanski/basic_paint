@@ -1,9 +1,15 @@
+
+
 export default class Hud {
     constructor() {
-
+        let menu = {
+            buildings: 
+        }
     }
 
-    get itemBg() {
+
+
+    get get() {
         var imageObj = new Image();
         imageObj.src = 'assets/img/menu.jpg';
         return new Promise((resolve) => {
