@@ -12,11 +12,11 @@ class Controller {
         this.view = new View();
         this.game = new Game();
         this.menu = new Hud();
-        this.setup(this.game.map.mapArray, this.menu.itemBg);
+        this.setup(this.game.map.mapArray, this.menu.menuItem);
+        console.log(this.menu.menuItem)
 
 
 
- 
     }
 
     setup(map, img) {
@@ -26,13 +26,28 @@ class Controller {
     }
 
     setupEventHandlers() {
-        this.view.mapLayer.on('click', function(e) {
+        this.view.mapLayer.on('click', (e) => {
             const selectedTile = e.target;
             selectedTile.fill('blue');
             selectedTile.draw();
         });
-    }
 
+        //When mouse hover over menu items
+        this.view.hudLayer.on('mouseover', (e) => {
+            e.target.cache();
+            e.target.filters([Konva.Filters.Brighten]);
+            e.target.brightness(0.05);
+            this.view.stage.container().style.cursor = 'pointer';
+            this.view.hudLayer.batchDraw();
+        });
+        this.view.hudLayer.on('mouseleave', (e) => {
+            e.target.cache();
+            e.target.filters([Konva.Filters.Brighten]);
+            e.target.brightness(0);
+            this.view.stage.container().style.cursor = 'default';
+            this.view.hudLayer.batchDraw();
+        });
+    }
 }
 
 

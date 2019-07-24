@@ -41,12 +41,13 @@ export default class View {
         this.mapLayer.add(this.mapGroup).batchDraw();
     }
 
-    render(area) {
+    //Render single item on given position
+    render(area, x, y) {
         area.then((v) => {
+            (x == undefined) ? v.attrs.x = 0 :  v.attrs.x = x;
+            (y == undefined) ? v.attrs.y = 0 :  v.attrs.y = y;
             this.hudGroup.add(v);
             this.hudLayer.add(this.hudGroup).batchDraw();
         })
     }
-
-
 }
