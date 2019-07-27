@@ -31,7 +31,7 @@ class Controller {
             selectedTile.fill('blue');
             selectedTile.draw();
         });
-
+   
         //When mouse hover over menu items
         this.view.hudLayer.on('mouseover', (e) => {
             e.target.cache();
