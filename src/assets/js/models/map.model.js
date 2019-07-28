@@ -1,5 +1,5 @@
 import Konva from 'konva';
-import Tile from './tileModel';
+import Tile from './tile.model';
 
 export default class Map {
     constructor(width, height, tileSize) {
@@ -8,7 +8,7 @@ export default class Map {
         this.tileHeight = tileSize / 2 || 25;
         this.tileWidth = Math.round(Math.tan(1.04719755) * this.tileHeight);
         this.mapArray = [];
-        this.generateMap()
+        this.generateMap();
 
     }
 
@@ -25,7 +25,6 @@ export default class Map {
             };
 
         for (let i = 0; i < this.height; i++) {
-            this.mapArray.push([]);
             if (i % 2) {
                 posCalc.x = tileDimensions.width;
             } else {
@@ -35,9 +34,10 @@ export default class Map {
                 let tile = new Tile(id, posCalc.x, posCalc.y,
                     new Konva.Path({
                         data: `M${posCalc.x} ${posCalc.y} l ${tileDimensions.width} ${tileDimensions.height} l -${tileDimensions.width} ${tileDimensions.height} l -${tileDimensions.width} -${tileDimensions.height}`,
-                        fill: 'green'
+                        fill: 'green',
+                        id: id
                     }));
-                this.mapArray[i].push(tile);
+                this.mapArray.push(tile);
                 //Calculate starting point for next tile
                 posCalc.x += tileDimensions.width * 2;
                 id++;

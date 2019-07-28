@@ -1,7 +1,9 @@
 import '../scss/style.scss';
+import { fromEvent } from 'rxjs';
+import { throttleTime } from 'rxjs/operators';
 
-import Game from './models/gameModel.js';
-import Hud from './models/hudModel.js';
+import Game from './models/game.model.js';
+import Hud from './models/hud.model.js';
 import View from './views/view.js';
 
 
@@ -13,10 +15,6 @@ class Controller {
         this.game = new Game();
         this.menu = new Hud();
         this.setup(this.game.map.mapArray, this.menu.menuItem);
-        console.log(this.menu.menuItem)
-
-
-
     }
 
     setup(map, img) {
@@ -26,12 +24,17 @@ class Controller {
     }
 
     setupEventHandlers() {
-        this.view.mapLayer.on('click', (e) => {
-            const selectedTile = e.target;
-            selectedTile.fill('blue');
-            selectedTile.draw();
+
+        this.view.mapLayer.on('mouseover', (e) => {
+            const tile = this.game.map.mapArray[e.target.attrs.id];
+            tile.path.fill('white');
+            tile.path.draw();
+            setTimeout(()=>{
+                tile.path.fill('green');
+                tile.path.draw();
+            },5);
         });
-   
+  
         //When mouse hover over menu items
         this.view.hudLayer.on('mouseover', (e) => {
             e.target.cache();
