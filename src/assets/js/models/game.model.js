@@ -1,5 +1,5 @@
 let config = require('../config.json');
-import Map from './mapModel';
+import Map from './map.model';
 
 
 export default class Game {

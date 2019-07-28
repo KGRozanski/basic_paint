@@ -33,10 +33,9 @@ export default class View {
 
     renderMap(mapArray) {
         mapArray.forEach((el) => {
-            el.forEach(tile => {
                 // add every shape to the layer
-                this.mapGroup.add(tile.path);
-            });
+                this.mapGroup.add(el.path);
+           
         });
         this.mapLayer.add(this.mapGroup).batchDraw();
     }
