@@ -1,5 +1,5 @@
 import '../scss/style.scss';
-import { fromEvent } from 'rxjs';
+import { fromEvent, Observable } from 'rxjs';
 import { throttleTime } from 'rxjs/operators';
 
 import Game from './models/game.model.js';
@@ -14,17 +14,56 @@ class Controller {
         this.view = new View();
         this.game = new Game();
         this.menu = new Hud();
-        this.setup(this.game.map.mapArray, this.menu.menuItem);
+        this.setup(this.game.map.mapArray);
+        this.previousTime = 0.0;
+        this.currentTile = null;
     }
 
-    setup(map, img) {
+    
+
+    setup(map) {
         this.view.renderMap(map);
-        this.view.render(img);
+        this.view.renderMenu(this.menu.background, this.menu.buildingButtons);
         this.setupEventHandlers();
+        // Launch
+        window.requestAnimationFrame(time => {
+            
+            this.previousTime = time;
+            loop(time);
+        });
+
+        const loop = time => {
+            // Compute the delta-time against the previous time
+            const dt = time - this.previousTime;   
+            // Update the previous time
+            this.previousTime = time;
+            // Update your game
+            this.update(dt);
+            // Render your game
+            this.render();
+            // Repeat
+            window.requestAnimationFrame(loop);
+          }
     }
+
+    update() {
+        if(this.buildMode == true) {
+            
+        }
+    }
+
+    render() {
+    }
+
+   
+      
+      
+    
+   
+  
+
 
     setupEventHandlers() {
-
         this.view.mapLayer.on('mouseover', (e) => {
             const tile = this.game.map.mapArray[e.target.attrs.id];
             tile.path.fill('white');
@@ -33,9 +72,19 @@ class Controller {
                 tile.path.fill('green');
                 tile.path.draw();
             },5);
+            this.currentTile = tile;
         });
+        
   
         //When mouse hover over menu items
+        this.view.hudLayer.on('click', (e) => {
+            console.log(e.target)
+            e.target.cache();
+            e.target.filters([Konva.Filters.Brighten]);
+            e.target.brightness(0.05);
+            this.view.stage.container().style.cursor = 'pointer';
+            this.view.hudLayer.batchDraw();
+        });
         this.view.hudLayer.on('mouseover', (e) => {
             e.target.cache();
             e.target.filters([Konva.Filters.Brighten]);
@@ -56,7 +105,6 @@ class Controller {
 
 
 const ctrl = new Controller();
-
 
 
 

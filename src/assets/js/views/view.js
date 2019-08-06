@@ -33,18 +33,26 @@ export default class View {
 
     renderMap(mapArray) {
         mapArray.forEach((el) => {
-                // add every shape to the layer
-                this.mapGroup.add(el.path);
-           
+            // add every shape to the layer
+            this.mapGroup.add(el.path);
         });
         this.mapLayer.add(this.mapGroup).batchDraw();
     }
 
+    renderMenu(background, buildings) {
+
+        buildings.forEach((el) => {
+            console.log(el);
+            this.render(background);
+
+        });
+    }
+
     //Render single item on given position
-    render(area, x, y) {
+    render(area) {
         area.then((v) => {
-            (x == undefined) ? v.attrs.x = 0 :  v.attrs.x = x;
-            (y == undefined) ? v.attrs.y = 0 :  v.attrs.y = y;
+            // (x == undefined) ? v.attrs.x = 0 :  v.attrs.x = x;
+            // (y == undefined) ? v.attrs.y = 0 :  v.attrs.y = y;
             this.hudGroup.add(v);
             this.hudLayer.add(this.hudGroup).batchDraw();
         })
