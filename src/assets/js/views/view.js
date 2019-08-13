@@ -28,6 +28,7 @@ export default class View {
         //Add layer to the Konva stage
         this.stage.add(this.mapLayer);
         this.stage.add(this.hudLayer);
+        
     }
 
 
@@ -56,5 +57,11 @@ export default class View {
             this.hudGroup.add(v);
             this.hudLayer.add(this.hudGroup).batchDraw();
         })
+    }
+    render2(tile, color) {
+        tile.path.fill(color);
+        this.mapLayer.add(tile.path);
+        this.mapLayer.add(this.mapGroup).batchDraw();
+        
     }
 }
