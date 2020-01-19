@@ -1,9 +1,9 @@
-let config = require('../config.json');
 import Konva from 'konva';
 
 
 export default class View {
-    constructor() {
+    constructor(state) {
+        this.state = state;
         this.width = window.innerWidth,
         this.height = window.innerHeight,
         this.canvas = document.getElementsByTagName('canvas');
@@ -12,56 +12,75 @@ export default class View {
             width: this.width,
             height: this.height
         });
+
+
         //Initialize new layer to handle the map
         this.mapLayer = new Konva.Layer();
-        this.hudLayer = new Konva.Layer();
+        this.walletLayer = new Konva.Layer();
+        this.buildingsLayer = new Konva.Layer();
 
-        this.mapGroup = new Konva.Group({
-            x: 0,
-            y: 0
-        });
-        this.hudGroup = new Konva.Group({
-            x: 0,
-            y: this.height - 100
-        });
 
         //Add layer to the Konva stage
         this.stage.add(this.mapLayer);
-        this.stage.add(this.hudLayer);
+        this.stage.add(this.walletLayer);
+        this.stage.add(this.buildingsLayer);
+
         
     }
 
+    updateWallet() {
+        this.walletLayer.destroyChildren();
+        //Rendering wallet
+        this.walletAmount = new Konva.Text({
+            x: 5,
+            y: 6,
+            text: '$ ' + this.state.money.toString(),
+            fontSize: 30,
+            fontFamily: 'Calibri',
+            fill: 'black'
+          });
+        var rect = new Konva.Rect({
+            width: 200,
+            height: 40,
+            fill: '#fff',
+            stroke: 'black'
+          });
+          
+        this.walletLayer.add(rect);
+        this.walletLayer.add(this.walletAmount);
+    }
+
+
+
+
+
+
+
 
     renderMap(mapArray) {
+        this.mapGroup = new Konva.Group({ x: 0, y: 0 });
         mapArray.forEach((el) => {
             // add every shape to the layer
             this.mapGroup.add(el.path);
         });
-        this.mapLayer.add(this.mapGroup).batchDraw();
+        this.mapLayer.add(this.mapGroup);
     }
 
-    renderMenu(background, buildings) {
-
-        buildings.forEach((el) => {
-            console.log(el);
-            this.render(background);
-
-        });
+    renderImage(url, x, y, w, h) {
+        var imageObj = new Image();
+        imageObj.src = url;
+    
+        imageObj.onload = () => {
+            var image = new Konva.Image({
+                x: x,
+                y: y,
+                image: imageObj,
+                width: w,
+                height: h
+            });
+            this.buildingsLayer.add(image).draw()
+        }
     }
 
-    //Render single item on given position
-    render(area) {
-        area.then((v) => {
-            // (x == undefined) ? v.attrs.x = 0 :  v.attrs.x = x;
-            // (y == undefined) ? v.attrs.y = 0 :  v.attrs.y = y;
-            this.hudGroup.add(v);
-            this.hudLayer.add(this.hudGroup).batchDraw();
-        })
-    }
-    render2(tile, color) {
-        tile.path.fill(color);
-        this.mapLayer.add(tile.path);
-        this.mapLayer.add(this.mapGroup).batchDraw();
-        
-    }
+
 }
