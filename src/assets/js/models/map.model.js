@@ -33,7 +33,14 @@ export default class Map {
             for (var cell = 0; cell < this.width; cell++) {
                 let tile = new Tile(id, posCalc.x, posCalc.y,
                     new Konva.Path({
-                        data: `M${posCalc.x} ${posCalc.y} l ${tileDimensions.width} ${tileDimensions.height} l -${tileDimensions.width} ${tileDimensions.height} l -${tileDimensions.width} -${tileDimensions.height}`,
+                        data: `M${posCalc.x} 
+                            ${posCalc.y} l 
+                            ${tileDimensions.width} 
+                            ${tileDimensions.height} l 
+                            -${tileDimensions.width} 
+                            ${tileDimensions.height} l 
+                            -${tileDimensions.width} 
+                            -${tileDimensions.height}`,
                         fill: 'green',
                         id: id
                     }));
@@ -44,6 +51,7 @@ export default class Map {
             }
             posCalc.y += tileDimensions.height;
         }
+        console.log(this.mapArray)
         return this.mapArray;
     }
 
