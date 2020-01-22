@@ -1,0 +1,14 @@
+[
+    {
+        "id": 1,
+        "name": "Hut",
+        "cost": 10,
+        "image": "assets/img/hut.png"
+    },
+    {
+        "id": 2,
+        "name": "Hut 2",
+        "cost": 25,
+        "image": "assets/img/hut.png"
+    }
+]

@@ -23,6 +23,8 @@ export default class Game {
             this.state.money += this.state.profits;
         }, 1000);
         this.view.renderMap(map);
+        this.view.renderMenu();
+
         this.view.renderImage('assets/img/hut.png', 100, 100, 75, 75)
         window.requestAnimationFrame(this.loop.bind(this));
 
@@ -31,12 +33,13 @@ export default class Game {
     setupEventHandlers() {
 
         //Function coloring currently selected tile
-        // this.view.mapLayer.on('mouseover', (e) => {
-        //     const tile = this.map.mapArray[e.target.attrs.id];
-        //     this.state.hoveredTile = tile;
-        //     let color = '#fff';
-        //     tile.path.fill(color);
-        // });
+        this.view.mapLayer.on('mouseover', (e) => {
+            const tile = this.map.mapArray[e.target.attrs.id];
+            this.state.hoveredTile = tile;
+            let color = '#fff';
+            tile.path.fill(color);
+            console.log(this.state)
+        });
 
     }
 
