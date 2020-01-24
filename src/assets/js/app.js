@@ -6,7 +6,8 @@ class Controller {
         this.state = {
             money: 0,
             profits: 1,
-            hoveredTile: null
+            hoveredTile: null,
+            menuSelectedItem: false,
         };
         this.game = new Game(this.state);
     }

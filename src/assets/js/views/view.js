@@ -26,6 +26,10 @@ export default class View {
             x: 0,
             y: this.height - 100
         });
+        this.buildingGroup = new Konva.Group({
+            x: 0,
+            y: 0
+        });
 
 
 
@@ -62,24 +66,72 @@ export default class View {
 
     renderMenu() {
         let i = 0;
+        let n = 0;
         this.buildings.forEach((building) => {
-            let bg = new Image();
-            bg.src = 'assets/img/menu_bg.jpg';
+            new Promise ((resolve, reject) => {
 
-            bg.onload = () => {
-                console.log(i)
-                let background = new Konva.Image({
-                    x: i,
-                    y: 0,
-                    image: bg,
-                    width: 100,
-                    height: 100
-                })
+                let bg = new Image();
+                bg.src = 'assets/img/menu_bg.jpg';
+                bg.addEventListener('load', ()=> {
+                    
+                    resolve (new Konva.Image({
+                        name: building.name,
+                        x: n,
+                        y: 0,
+                        image: bg,
+                        width: 100,
+                        height: 100
+                    }))
+                    n += 100;
+                });
+
+            }).then((background) => {
                 this.menuGroup.add(background);
-                this.menuLayer.add(this.menuGroup).draw()
-                i += 100;
-            }
+            }).then(
+                () => {
+                    
+                    let buildingImage = new Image();
+                    buildingImage.src = building.image;
+        
+        
+                    buildingImage.addEventListener('load', () => {
+                        let buildingImageObj = new Konva.Image({
+                            name: building.name,
+                            x: i + 20,
+                            y: 20,
+                            image: buildingImage,
+                            width: 60,
+                            height: 60
+                        })
+                        this.menuGroup.add(buildingImageObj);
+                        this.menuLayer.add(this.menuGroup).draw()
+                        i += 100;
+                    });
 
+                }
+            )
+            
+     
+
+
+
+
+            // let buildingImage = new Image();
+            // buildingImage.src = 'assets/img/hut.png';
+
+            // buildingImage.onload = () => {
+            //     let buildingImageObj = new Konva.Image({
+            //         x: i,
+            //         y: 0,
+            //         image: buildingImage,
+            //         width: 100,
+            //         height: 100
+            //     })
+            //     this.menuGroup.add(buildingImageObj);
+            //     this.menuLayer.add(this.menuGroup).draw()
+            // }
+  
+            
         });
     }
 
@@ -96,12 +148,13 @@ export default class View {
         this.mapLayer.add(this.mapGroup);
     }
 
-    renderImage(url, x, y, w, h) {
+    renderBuilding(url, x, y, w, h, layer) {
         var imageObj = new Image();
-        imageObj.src = url;
-    
-        imageObj.onload = () => {
-            var image = new Konva.Image({
+            imageObj.src = url;
+        let image;
+
+        imageObj.addEventListener('load', ()=> {
+            image = new Konva.Image({
                 x: x,
                 y: y,
                 image: imageObj,
@@ -109,7 +162,9 @@ export default class View {
                 height: h
             });
             this.buildingsLayer.add(image).draw()
-        }
+        })
+    
+    
     }
 
 
