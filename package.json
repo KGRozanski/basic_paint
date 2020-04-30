@@ -34,7 +34,7 @@
   "dependencies": {
     "@babel/plugin-transform-runtime": "^7.8.3",
     "copy-webpack-plugin": "^4.6.0",
-    "jquery": "^3.3.1",
+    "jquery": "^3.5.0",
     "konva": "^3.3.3",
     "popper.js": "^1.14.6",
     "rxjs": "^6.5.2",
